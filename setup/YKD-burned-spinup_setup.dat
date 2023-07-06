@@ -198,8 +198,8 @@ T_profile 6
 1.5          0.5        0.  2.2E-4 0. 0. 0.
 #
 T_soilprofile 2
-0. 7.9
-10. 4.
+0. 0.
+10. 1.
 #.
 #----------------------------------------------------------------------------------------
 #                               BOUNDARY CONDITIONS: TRIBUTARIES AND EFFLUENTS
@@ -263,15 +263,15 @@ assim       0
 turb_out    1
 monthly     1
 daily       1
-hourly      0
+hourly      1
 everystep   0
 time_series 1
 dt_out      24.
 nscreen     10
 zserout     -999.
 scale_output 0
-accum_begin 2003060100
-accum_end   2003070100
+accum_begin 2000100112
+accum_end   2010100112
 rtemp 1
 -999. -999. -999.
 #
