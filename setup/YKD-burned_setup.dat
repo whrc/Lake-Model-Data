@@ -276,11 +276,11 @@ hourly      0
 everystep   0
 time_series 1
 dt_out      24.
-nscreen     100
+nscreen     1000
 zserout     -999.
 scale_output 0
-accum_begin 2000100112
-accum_end   2010100112
+accum_begin 2022010112
+accum_end   2023123112
 rtemp 1
 -999. -999. -999.
 #

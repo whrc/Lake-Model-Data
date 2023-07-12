@@ -120,7 +120,7 @@ d_bot  1.E-2
 #----------------------------------------------------------------------------------------
 #
 varalb   1
-PBLpar   0 
+PBLpar   3
 waveenh  0
 momflxpart 0
 c_d      -999
@@ -141,7 +141,7 @@ carbon_model 2
 skin     0
 massflux 0
 ifrad    1
-ifbubble 1	
+ifbubble 1
 sedim    0
 salsoil  0
 saltice  0 
@@ -189,13 +189,18 @@ deadvol 0.
 #3.7994820663    11.5276435987   22.3359795778E-3  0.  0.  0.
 #4.0946210218    11.6325191677   23.7094310675E-3  0.  0.  0.
 #7.              5.              30.E-3            0.  0.  0.
-T_profile 6
+T_profile 11
 0.25           0.5        0.  1.8E-4 0. 0. 0.
-0.5           0.5        0.  1.8E-4 0. 0 0.
-0.75           0.5        0.  1.8E-4 0. 0. 0.
+0.5           0.5        0.  1.8E-4 0. 0. 0.
+0.75            0.5        0.  1.8E-4 0. 0. 0.
 1.0            0.5        0.  1.8E-4 0. 0. 0.
-1.25            0.5        0.  1.8E-4 0. 0. 0.
-1.5            0.5        0.  2.2E-4 0. 0. 0.
+1.25           0.5        0.  1.8E-4 0. 0. 0.
+1.5          0.5        0.  2.2E-4 0. 0. 0.
+1.75          0.5        0.  2.2E-4 0. 0. 0.
+2.00          0.5        0.  2.2E-4 0. 0. 0.
+2.25          0.5        0.  2.2E-4 0. 0. 0.
+2.50         0.5        0.  2.2E-4 0. 0. 0.
+2.75          0.5        0.  2.2E-4 0. 0. 0.
 #
 T_soilprofile 2
 0. 0.
@@ -216,8 +221,10 @@ N_tribin 0
 N_triblev 0
 #fileinflow  'testlake_inflows.dat'
 #fileoutflow 'testlake_outflow.dat'
+#iefflloc 2
 iefflloc 0
 dttribupdate 0.
+#dttribupdate 1.
 #
 #----------------------------------------------------------------------------------------
 #            DATA ASSIMILATION CONTROLS (NOT OPERATIONAL: PUT EVERYTHING TO 0)
@@ -261,26 +268,31 @@ assim       0
 turb_out    1
 monthly     1
 daily       1
-hourly      1
+hourly      0
 everystep   0
 time_series 1
 dt_out      24.
-nscreen     24
+nscreen     100
 zserout     -999.
 scale_output 0
-accum_begin 2022010100
-accum_end   2023010100
+accum_begin 2000100112
+accum_end   2010100112
 rtemp 1
 -999. -999. -999.
 #
-ngrid_out 7
+ngrid_out 12
 0.
 0.25
 0.5
 0.75
-1.
+1.0
 1.25
 1.5
+1.75
+2.0
+2.25
+2.5
+2.75
 #
 ngridice_out 5
 0.1

@@ -35,7 +35,7 @@
 # N_Precip*       --- the number of coloumn with precipitation intensity,       (m/s)
 #-----------------------------------------------------------------------------------------
 #
-dataname    'YKD-burned'
+dataname    'YKD-unburned-spinup'
 forc_format 0
 npoints     1
 # 8
@@ -89,12 +89,12 @@ N_SurfTemp      -1
 # call_Flake   --- the switch for integrating Flake model (1 - on, 0 - off)
 #-----------------------------------------------------------------------------------------
 #
-year0       2022
-month0      01
+year0       2000
+month0      10
 day0        1
 hour0       12
 #
-tinteg      365
+tinteg      3650
 spinup_times  0
 spinup_period 0
 dt          20
@@ -171,7 +171,7 @@ fetch       100.0
 #-----------------------------------------------------------------------------------------
 #
 l10         0.0
-h10         1.5
+h10         2.75
 #h10         3.
 #select_h10  3
 #1  1.2
@@ -212,20 +212,24 @@ init_T      1
 #                   the first N values are polynomial coefficients, where N stands after
 #                   'effl_outflow' keyword
 #
-area_lake      818
-#area_lake       9.E+10
+area_lake      3287.06
 cellipt 20
 lakeform 2
 trib_inflow    -9999.
 effl_outflow 0
 0. 0. 0.
-morphometry    6
-0.	818
-0.25	700
-0.5	600
-1.0	300
-1.25	100
-1.4	10	
+morphometry    11
+0.	3287.06
+0.25 3000.
+0.5 2800.
+1.0 2600.
+1.25 2400.
+1.5 2200.
+1.75 2000.
+2.0 1800.
+2.25 1200.
+2.5 600.
+2.7 300.
 #
 #-----------------------------------------------------------------------------------------
 #                               NETCDF OUTPUT PARAMETERS
