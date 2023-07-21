@@ -94,7 +94,7 @@ month0      10
 day0        1
 hour0       12
 #
-tinteg      3650
+tinteg      5475
 spinup_times  0
 spinup_period 0
 dt          20
