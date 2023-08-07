@@ -89,12 +89,12 @@ N_SurfTemp      -1
 # call_Flake   --- the switch for integrating Flake model (1 - on, 0 - off)
 #-----------------------------------------------------------------------------------------
 #
-year0       2000
+year0       1990
 month0      10
 day0        1
 hour0       12
 #
-tinteg      5475
+tinteg      9125
 spinup_times  0
 spinup_period 0
 dt          20

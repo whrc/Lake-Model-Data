@@ -270,7 +270,7 @@ dt_out      24.
 nscreen     100
 zserout     -999.
 scale_output 0
-accum_begin 2000100112
+accum_begin 1990100112
 accum_end   2015100112
 rtemp 1
 -999. -999. -999.
