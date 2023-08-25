@@ -85,8 +85,8 @@ class SensitivityAnalysis():
     def create_files(self):
         self.number = len(self.list_of_modifies_files)
         for i, (setup_file, driver_file) in enumerate(self.list_of_modifies_files):
-            setup_filename = f"setup/YKD{i}_setup.dat"
-            driver_filename = f"setup/YKD{i}_driver.dat"
+            setup_filename = f"../setup/YKD{i}_setup.dat"
+            driver_filename = f"../setup/YKD{i}_driver.dat"
 
             self.write_dictionary_to_file(setup_file, setup_filename)
             self.write_dictionary_to_file(driver_file, driver_filename)
