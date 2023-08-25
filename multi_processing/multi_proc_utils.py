@@ -28,6 +28,9 @@ class log_wrapper:
             print(f"{self.tag} completed successfully.")
 
 class SensitivityAnalysis():
+    '''
+    This function lets LAKE model runs in parallel
+    '''
     def __init__(self,setup_folder = "setup"):
         #change this to your location on your VMs
         self.file_setup = "setup/YKD-burned_setup.dat"
@@ -42,7 +45,11 @@ class SensitivityAnalysis():
         self.setup_folder = setup_folder
 
     def create_directories_auto(self, number_directories):
-        # Create the directories and copy necessary files to them
+        '''
+        Creates ``number_directories`` of directories and copies required files into them
+        
+        number_directories : int
+        '''
         for i in range(number_directories):
             #change this to where you want to create all directories
             new_directory = f"LAKE{i}"
@@ -50,9 +57,8 @@ class SensitivityAnalysis():
             self.copy_required_files(new_directory)
 
     def copy_required_files(self, new_directory):
-        # Copy necessary files to the new directory
-        #change this to your location on your computer if you are running from root directory then 
-        #just leave it like that
+        #Copy necessary files to the new directory change this to your location on 
+        #your computer if you are running from root directory then just leave it like that
         source_files = [
             "driver_file.dat",
             "results",
@@ -65,7 +71,6 @@ class SensitivityAnalysis():
         ]
 
         for source in source_files:
-
             self.copy_to_directory(source, new_directory)
 
     def copy_to_directory(self, source, destination_directory):
