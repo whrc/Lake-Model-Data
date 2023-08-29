@@ -163,7 +163,7 @@ class SensitivityAnalysis():
             data_folder = os.path.join(self.work_dir,f"LAKE{i}/data")
             setup_filename = os.path.join(setup_folder, f"YKD{i}_setup.dat")
             driver_filename = os.path.join(setup_folder, f"YKD{i}_driver.dat")
-            data_filename = os.path.join(setup_folder,f"YKD{i}.dat")
+            data_filename = os.path.join(data_folder,f"YKD{i}.dat")
 
             # Copy the content from the original setup and driver files to the new files
             with open(self.file_setup, "r") as src_setup_file, open(setup_filename, "w") as dst_setup_file:
