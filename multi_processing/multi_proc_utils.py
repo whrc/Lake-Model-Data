@@ -31,18 +31,21 @@ class SensitivityAnalysis():
     '''
     This function lets LAKE model runs in parallel
     '''
-    def __init__(self,setup_folder = "setup"):
+    def __init__(self,work_dir = "model_output",path_to_model_dir = "LAKE-LAKE3.0"):
         #change this to your location on your VMs
-        self.file_setup = "setup/YKD-burned_setup.dat"
-        self.file_driver = "setup/YKD-burned_driver.dat"
-        self.file_data = "data/YKD-burned.dat"
+        self.path_to_model_dir = path_to_model_dir
+        self.file_setup = os.path.join(self.path_to_model_dir,"setup/testlake_setup.dat")
+        self.file_driver = os.path.join(self.path_to_model_dir,"setup/testlake_driver.dat")
+        self.file_data = os.path.join(self.path_to_model_dir,"data/testlake.dat")
         self.number = 0
         self.target_string = ""
         self.file_list = []
         self.target_values = []
-        self.dictionaries = []
         self.list_of_modifies_files = []
-        self.setup_folder = setup_folder
+        #change this parameter depending on your username in google cloud
+        self.setup_folder = "home/kgurbanov"
+        self.work_dir = work_dir
+        
 
     def create_directories_auto(self, number_directories):
         '''
@@ -52,7 +55,7 @@ class SensitivityAnalysis():
         '''
         for i in range(number_directories):
             #change this to where you want to create all directories
-            new_directory = f"LAKE{i}"
+            new_directory = os.path.join(self.work_dir,f"LAKE{i}")
             self.create_directory(new_directory)
             self.copy_required_files(new_directory)
 
@@ -74,7 +77,7 @@ class SensitivityAnalysis():
             self.copy_to_directory(source, new_directory)
 
     def copy_to_directory(self, source, destination_directory):
-        source_path = os.path.join(source)
+        source_path = os.path.join(self.path_to_model_dir, source) if self.path_to_model_dir else source
 #         print(source_path)
         destination_path = os.path.join(destination_directory, source)
         if os.path.exists(destination_path):
@@ -144,13 +147,16 @@ class SensitivityAnalysis():
         Args:
         num_files (int): The number of tuples to generate.
         """
-        if not os.path.exists(self.setup_folder):
-            os.makedirs(self.setup_folder)
+        if not os.path.exists(os.path.join(self.work_dir, self.setup_folder)):
+            os.makedirs(os.path.join(self.work_dir, self.setup_folder))
+
 
         for i in range(num_files):
-            setup_folder = f"LAKE{i}/setup"
+            setup_folder = os.path.join(self.work_dir,f"LAKE{i}/setup")
+            data_folder = os.path.join(self.work_dir,f"LAKE{i}/data")
             setup_filename = os.path.join(setup_folder, f"YKD{i}_setup.dat")
             driver_filename = os.path.join(setup_folder, f"YKD{i}_driver.dat")
+            data_filename = os.path.join(data_folder,f"YKD{i}.dat")
 
             # Copy the content from the original setup and driver files to the new files
             with open(self.file_setup, "r") as src_setup_file, open(setup_filename, "w") as dst_setup_file:
@@ -160,7 +166,9 @@ class SensitivityAnalysis():
             with open(self.file_driver, "r") as src_driver_file, open(driver_filename, "w") as dst_driver_file:
                 for line in src_driver_file:
                     dst_driver_file.write(line.replace("\t", " "))  # Replace tabs with spaces
-
+            with open(self.file_data, "r") as src_driver_file, open(data_filename, "w") as dst_driver_file:
+                for line in src_driver_file:
+                    dst_driver_file.write(line.replace("\t", " "))  # Replace tabs with spaces
             # Append the tuple of filenames to the list_of_modifies_files
             self.list_of_modifies_files.append((setup_filename, driver_filename))
 
@@ -249,8 +257,9 @@ class SensitivityAnalysis():
             pool.map(self.create_directory, directories)
         
         # Modify driver file
-        setup_folder = f"/home/kgurbanov/{project_directory}"
-        driver_file_path = os.path.join(setup_folder, "driver_file.dat")
+        setup_folder = os.path.join(self.work_dir, project_directory)
+        driver_file_path = os.path.join(project_directory, "driver_file.dat")
+        print("Driver_file_path is",driver_file_path)
         if OS == "linux":
             sed_command = f"sed -i '2d' {driver_file_path} && sed -i \"\\$a setup/{project_name}_driver.dat\" {driver_file_path}"
         elif OS == "OSX":
@@ -258,7 +267,8 @@ class SensitivityAnalysis():
         os.system(sed_command)
 
         # Modify setup file
-        setup_file_path = os.path.join(setup_folder, "setup_file.dat")
+        setup_file_path = os.path.join(project_directory, "setup_file.dat")
+        print(setup_file_path)
         if OS == "linux":
             sed_command = f"sed -i '2d' {setup_file_path} && sed -i \"\\$a setup/{project_name}_setup.dat\" {setup_file_path}"
         elif OS == "OSX":
@@ -301,8 +311,7 @@ class SensitivityAnalysis():
         self.run_model(rundirectory,project_directory)
         if experiment_name:
             basename = experiment_name.rsplit("_", 1)[0]
-            source_directory = f"{project_directory}/results/{basename}"
-
+            source_directory = os.path.join(f"{project_directory}/results/{basename}")
 #             Create a timestamp directories
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             destination_directory_with_timestamp = f"results/{experiment_name}_{timestamp}"
@@ -391,16 +400,21 @@ class SensitivityAnalysis():
         directories = []
         project_names = []
         for i in range(number):
-            directories.append(f"LAKE{i}")
+            directories.append(os.path.join(self.work_dir, f"LAKE{i}"))
+
             project_names.append(f"YKD{i}")
         print(directories)
         print(project_names)
         self.clear()
+#         self.create_data_file()
+
         self.create_directories_auto(number)
         self.generate_and_write_files(number)
-        self.create_data_file()
         self.find_target(["dataname"], project_names, number)
         list_of_modified_files = self.find_target(p_name, target_values, number)
         self.create_multiple_projects(project_names, directories)
         self.run_experiment_parallel(project_names, rundirectory, directories)
+    def clear_workdir(self):
+        shutil.rmtree(self.work_dir)
+    
 

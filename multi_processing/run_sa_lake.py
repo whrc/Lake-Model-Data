@@ -3,23 +3,27 @@
 
 import os
 import numpy as np
-import  multi_proc_utils as mpu 
+import  multi as mp
 
+sa = mp.SensitivityAnalysis(path_to_model_dir = "/home/ejafarov/LAKE")
 p_name = ['khsO2', 'r0methprod',"VmaxCH4aeroboxid","khsCH4"]
 p_initial = [2.1e+3,6.e+2,1.15e-7,3.75e+10]
-logparams = [0,1,1,0]
-variance = 0.75
-N = len(p_initial)
+perturbation = 0.75
+logparams = np.zeros(len(p_initial))
+logparams[1] = 1
+N = len(p_name)
 seed = ''
-
-sa = mpu.SensitivityAnalysis()
-samples = sa.generate_samples_for_SA(p_name, p_initial, variance, logparams, N, seed)
+samples = sa.generate_samples_for_SA(p_name, p_initial, perturbation, logparams, N, seed)
 sample_values = samples.tolist()
-print('sample values:',sample_values)
+print(sample_values)
 
-number = len(sample_values)
-print('number of samples:',number)
+print('Sample size N:',N)
+
+sa.file_setup = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_setup.dat'
+sa.file_driver = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_driver.dat'
+sa.file_data = '/home/ejafarov/LAKE/Lake-Model-Data/data/prepped/YKD-unburned.dat'
 
 rundirectory = os.path.abspath(os.getcwd())
-print('working dir:',rundirectory)
-sa.create_and_run_sensitivity_analysis(number,p_name,sample_values,rundirectory)
+sa.clear_workdir()
+sa.create_and_run_sensitivity_analysis(N,p_name,sample_values,rundirectory)
+#all results are going to be saved with in root results folder
