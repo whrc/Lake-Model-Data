@@ -43,7 +43,7 @@ class SensitivityAnalysis():
         self.target_values = []
         self.list_of_modifies_files = []
         #change this parameter depending on your username in google cloud
-        self.setup_folder = "home/kgurbanov"
+        self.setup_folder = ""
         self.work_dir = work_dir
         
 
@@ -414,7 +414,23 @@ class SensitivityAnalysis():
         list_of_modified_files = self.find_target(p_name, target_values, number)
         self.create_multiple_projects(project_names, directories)
         self.run_experiment_parallel(project_names, rundirectory, directories)
+
     def clear_workdir(self):
-        shutil.rmtree(self.work_dir)
+        folder_path = self.work_dir
+        # Check if the folder exists
+        if os.path.exists(folder_path):
+            for filename in os.listdir(folder_path):
+                file_path = os.path.join(folder_path, filename)
+
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)  # Remove files and symbolic links
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)  # Remove sub-directories
+            except Exception as e:
+                print(f"Failed to delete {file_path}. Reason: {e}")
+
+        # If the folder doesn't exist, the code does nothing
+        #ashutil.rmtree(self.work_dir)
     
 

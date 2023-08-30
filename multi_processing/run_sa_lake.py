@@ -5,7 +5,8 @@ import os
 import numpy as np
 import  multi_proc_utils as mp
 
-sa = mp.SensitivityAnalysis(path_to_model_dir = "/home/ejafarov/LAKE")
+sa = mp.SensitivityAnalysis(work_dir='/home/ejafarov/LAKE/Lake-Model-Data/multi_processing/outputs',
+                            path_to_model_dir = "/home/ejafarov/LAKE")
 p_name = ['khsO2', 'r0methprod',"VmaxCH4aeroboxid","khsCH4"]
 p_initial = [2.1e+3,6.e+2,1.15e-7,3.75e+10]
 perturbation = 0.75
@@ -22,7 +23,7 @@ sa.file_setup = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_setup.da
 sa.file_driver = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_driver.dat'
 sa.file_data = '/home/ejafarov/LAKE/Lake-Model-Data/data/prepped/YKD-unburned.dat'
 
-rundirectory = os.path.abspath(os.getcwd())
+rundirectory = '/home/ejafarov/LAKE'#os.path.abspath(os.getcwd())
 sa.clear_workdir()
 sa.create_and_run_sensitivity_analysis(N,p_name,sample_values,rundirectory)
 #all results are going to be saved with in root results folder
