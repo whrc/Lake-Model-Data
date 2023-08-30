@@ -23,7 +23,7 @@ sa.file_setup = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_setup.da
 sa.file_driver = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_driver.dat'
 sa.file_data = '/home/ejafarov/LAKE/Lake-Model-Data/data/prepped/YKD-unburned.dat'
 
-rundirectory = '/home/ejafarov/LAKE'#os.path.abspath(os.getcwd())
+model_dir = '/home/ejafarov/LAKE'#os.path.abspath(os.getcwd())
 sa.clear_workdir()
-sa.create_and_run_sensitivity_analysis(N,p_name,sample_values,rundirectory)
+sa.create_and_run_sensitivity_analysis(N,p_name,sample_values,model_dir)
 #all results are going to be saved with in root results folder
