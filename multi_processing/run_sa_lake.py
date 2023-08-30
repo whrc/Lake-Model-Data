@@ -3,7 +3,7 @@
 
 import os
 import numpy as np
-import  multi as mp
+import  multi_proc_utils as mp
 
 sa = mp.SensitivityAnalysis(path_to_model_dir = "/home/ejafarov/LAKE")
 p_name = ['khsO2', 'r0methprod',"VmaxCH4aeroboxid","khsCH4"]
@@ -15,8 +15,7 @@ N = len(p_name)
 seed = ''
 samples = sa.generate_samples_for_SA(p_name, p_initial, perturbation, logparams, N, seed)
 sample_values = samples.tolist()
-print(sample_values)
-
+print('Samples:',sample_values)
 print('Sample size N:',N)
 
 sa.file_setup = '/home/ejafarov/LAKE/Lake-Model-Data/setup/YKD-unburned_setup.dat'
