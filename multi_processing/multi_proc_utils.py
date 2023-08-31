@@ -37,6 +37,7 @@ class SensitivityAnalysis():
         self.file_setup = os.path.join(self.path_to_model_dir,"setup/testlake_setup.dat")
         self.file_driver = os.path.join(self.path_to_model_dir,"setup/testlake_driver.dat")
         self.file_data = os.path.join(self.path_to_model_dir,"data/testlake.dat")
+        self.file_meteo = os.path.join(self.path_to_model_dir,"data/testlake.dat")
         self.number = 0
         self.target_string = ""
         self.file_list = []
@@ -70,7 +71,8 @@ class SensitivityAnalysis():
             "launch",
             "crproj",
             "lake.out",
-            "data"
+            "data",
+            "meteo"
         ]
 
         for source in source_files:
@@ -140,6 +142,18 @@ class SensitivityAnalysis():
             print("Data files created successfully.")
         except Exception as e:
             raise ValueError(f"Error creating data files: {e}")
+
+        try:
+                if not os.path.exists("meteo"):
+                    os.makedirs("meteo")
+    
+                for i, (setup_file, driver_file) in enumerate(self.list_of_modifies_files):
+                    meteo_filename = os.path.join("meteo", f"YKD{i}.dat")
+                    self._copy_files((self.file_meteo, meteo_filename))
+    
+                print("Meteo files created successfully.")
+        except Exception as e:
+            raise ValueError(f"Error creating data files: {e}")
     def generate_and_write_files(self, num_files):
         """
         Generate and write tuples of driver and setup files to the "setup" folder.
@@ -154,9 +168,11 @@ class SensitivityAnalysis():
         for i in range(num_files):
             setup_folder = os.path.join(self.work_dir,f"LAKE{i}/setup")
             data_folder = os.path.join(self.work_dir,f"LAKE{i}/data")
+            meteo_folder = os.path.join(self.work_dir,f"LAKE{i}/meteo")
             setup_filename = os.path.join(setup_folder, f"YKD{i}_setup.dat")
             driver_filename = os.path.join(setup_folder, f"YKD{i}_driver.dat")
             data_filename = os.path.join(data_folder,f"YKD{i}.dat")
+            meteo_filename = os.path.join(meteo_folder,f"YKD{i}.dat")
 
             # Copy the content from the original setup and driver files to the new files
             with open(self.file_setup, "r") as src_setup_file, open(setup_filename, "w") as dst_setup_file:
@@ -166,9 +182,15 @@ class SensitivityAnalysis():
             with open(self.file_driver, "r") as src_driver_file, open(driver_filename, "w") as dst_driver_file:
                 for line in src_driver_file:
                     dst_driver_file.write(line.replace("\t", " "))  # Replace tabs with spaces
+                    
             with open(self.file_data, "r") as src_driver_file, open(data_filename, "w") as dst_driver_file:
                 for line in src_driver_file:
                     dst_driver_file.write(line.replace("\t", " "))  # Replace tabs with spaces
+
+            with open(self.file_meteo, "r") as src_driver_file, open(meteo_filename, "w") as dst_driver_file:
+                for line in src_driver_file:
+                    dst_driver_file.write(line.replace("\t", " "))  # Replace tabs with spaces
+                    
             # Append the tuple of filenames to the list_of_modifies_files
             self.list_of_modifies_files.append((setup_filename, driver_filename))
 
@@ -283,6 +305,7 @@ class SensitivityAnalysis():
         check_file(f"./setup/{project_name}_setup.dat")
         check_file(f"./setup/{project_name}_driver.dat")
         check_file(f"./data/{project_name}.dat")
+        check_file(f"./meteo/{project_name}.dat")
 
         print("Project for LAKE model created successfully.")
 
@@ -319,12 +342,16 @@ class SensitivityAnalysis():
             # Copy files from source_directory to the new directory with a timestamp
             self.create_files_single(source_directory, destination_directory_with_timestamp, experiment_name)
 
-    def generate_samples_for_SA(self, p_name, p_initial, perturbation, logparams, N, seed=''):
+    def generate_samples_for_SA(self, p_name, p_initial, perturbation, logparams, N, bounds = None, seed=''):
         params = []  # Dictionary of parameters
-
-        for name, init in zip(p_name, p_initial):
-            p_bounds = [init - (init * perturbation), init + (init * perturbation)]
-            params.append(dict(name=name, bounds=p_bounds, initial=init))
+        if bounds:
+            for name, p_bounds in zip(p_name, bounds):
+                print(p_bounds)
+                params.append(dict(name=name, bounds=p_bounds))
+        else:        
+            for name, init in zip(p_name, p_initial):
+                p_bounds = [init - (init * perturbation), init + (init * perturbation)]
+                params.append(dict(name=name, bounds=p_bounds, initial=init))
 
         # Set random seed if provided
         if seed != '':
@@ -347,6 +374,8 @@ class SensitivityAnalysis():
             inum = 0
             for ilog, p in zip(logparams, params):
                 if ilog:
+                    print(p['bounds'][0])
+                    print(p['bounds'][1])
                     sm[:, inum] = loguniform.rvs(p['bounds'][0], p['bounds'][1], size=N)
                 inum += 1
 
