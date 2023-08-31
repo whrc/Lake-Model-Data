@@ -78,6 +78,9 @@ class SensitivityAnalysis():
         for source in source_files:
             self.copy_to_directory(source, new_directory)
 
+    def ig_f(self, dir, files):
+        return [f for f in files if os.path.isfile(os.path.join(dir, f))]
+        
     def copy_to_directory(self, source, destination_directory):
         source_path = os.path.join(self.path_to_model_dir, source) if self.path_to_model_dir else source
 #         print(source_path)
@@ -89,7 +92,7 @@ class SensitivityAnalysis():
         if os.path.isfile(source_path):
             shutil.copy2(source_path, destination_path)
         elif os.path.isdir(source_path):
-            shutil.copytree(source_path, destination_path)
+            shutil.copytree(source_path, destination_path, ignore = self.ig_f)
             
             
     def create_files(self):
