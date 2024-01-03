@@ -119,8 +119,8 @@ cp_period 10.
 # lam*         --- longitude (positive to East), dag (required only for water albedo calculation)
 # fetch        --- the wind fetch,                                          m
 #----------------------------------------------------------------------------------------
-#
-extwat      1.04 #
+# 0.485 - 0.85 mesotrophic
+extwat     0.0025
 # 3.
 #select_extwat 9
 #2   0.02
@@ -170,8 +170,8 @@ fetch       100.0
 #           3 - using the temperature profile, specified in *_setup.dat file after keyword T_profile
 #-----------------------------------------------------------------------------------------
 #
-l10         0.1408
-h10         1.5
+l10         0.2972
+h10         1.5 #1.5
 #h10         3.
 #select_h10  3
 #1  1.2
@@ -188,12 +188,12 @@ h10         1.5
 #8  10.
 #
 ls10        0.
-hs10        0.7934
+hs10        0.4582
 Ts0         -1.725308e-04
 Tb0         -2.335013e-05
 Tbb0        0.0151
 Tm          3.
-h_ML0       0.0
+h_ML0       1.5
 Sals0       1.532768e-13
 Salb0       1.532768e-13
 us0         1.E-5

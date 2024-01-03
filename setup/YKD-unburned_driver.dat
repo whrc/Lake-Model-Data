@@ -35,7 +35,7 @@
 # N_Precip*       --- the number of coloumn with precipitation intensity,       (m/s)
 #-----------------------------------------------------------------------------------------
 #
-dataname    'YKD-unburned-spinup'
+dataname    'YKD-unburned'
 forc_format 0
 npoints     1
 # 8
@@ -119,8 +119,8 @@ cp_period 10.
 # lam*         --- longitude (positive to East), dag (required only for water albedo calculation)
 # fetch        --- the wind fetch,                                          m
 #----------------------------------------------------------------------------------------
-#
-extwat      1.04 #
+#extwat 1.04
+extwat  0.0025
 # 3.
 #select_extwat 9
 #2   0.02
@@ -136,7 +136,7 @@ extwat      1.04 #
 extice      1.
 alphax      0.0
 alphay      0.0
-a_veg       0.3
+a_veg       0.003
 c_veg       1.e-3
 h_veg       0.
 #kor         0.
@@ -188,7 +188,7 @@ h10         2.75
 #8  10.
 #
 ls10        0.
-hs10        0.6993
+hs10        0.4213
 Ts0         -1.313352e-06
 Tb0         -1.515820e-05
 Tbb0        0. 0.0493
