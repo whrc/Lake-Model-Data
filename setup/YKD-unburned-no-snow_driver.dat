@@ -89,12 +89,12 @@ N_SurfTemp      -1
 # call_Flake   --- the switch for integrating Flake model (1 - on, 0 - off)
 #-----------------------------------------------------------------------------------------
 #
-year0       2022
-month0      1
+year0       2021
+month0      7
 day0        1
 hour0       12
 #
-tinteg      365
+tinteg      549
 spinup_times  0
 spinup_period 0
 dt          20
@@ -170,7 +170,7 @@ fetch       400.0
 #           3 - using the temperature profile, specified in *_setup.dat file after keyword T_profile
 #-----------------------------------------------------------------------------------------
 #
-l10         0.184
+l10         0.
 h10         2.75
 #h10         3.
 #select_h10  3
@@ -188,7 +188,7 @@ h10         2.75
 #8  10.
 #
 ls10        0.
-hs10        0.4213
+hs10        0.
 Ts0         -1.313352e-06
 Tb0         -1.515820e-05
 Tbb0        0. 0.0493
