@@ -35,7 +35,7 @@
 # N_Precip*       --- the number of coloumn with precipitation intensity,       (m/s)
 #-----------------------------------------------------------------------------------------
 #
-dataname    'YKD-burned-tplus5pct'
+dataname    'YKD-unburned-no-snow'
 forc_format 0
 npoints     1
 # 8
@@ -89,12 +89,12 @@ N_SurfTemp      -1
 # call_Flake   --- the switch for integrating Flake model (1 - on, 0 - off)
 #-----------------------------------------------------------------------------------------
 #
-year0       2022
-month0      1
+year0       2021
+month0      7
 day0        1
 hour0       12
 #
-tinteg      365
+tinteg      549
 spinup_times  0
 spinup_period 0
 dt          20
@@ -119,8 +119,8 @@ cp_period 10.
 # lam*         --- longitude (positive to East), dag (required only for water albedo calculation)
 # fetch        --- the wind fetch,                                          m
 #----------------------------------------------------------------------------------------
-# 0.485 - 0.85 mesotrophic
-extwat     0.0025
+#extwat 1.04
+extwat  0.0025
 # 3.
 #select_extwat 9
 #2   0.02
@@ -136,7 +136,7 @@ extwat     0.0025
 extice      1.
 alphax      0.0
 alphay      0.0
-a_veg       0.3
+a_veg       0.003
 c_veg       1.e-3
 h_veg       0.
 #kor         0.
@@ -144,7 +144,7 @@ kor         -999.
 # 1.e-4
 phi         61. 
 lam         -163.
-fetch       100.0
+fetch       400.0
 #
 #----------------------------------------------------------------------------------------
 #                                   INITIAL CONDITIONS
@@ -170,8 +170,8 @@ fetch       100.0
 #           3 - using the temperature profile, specified in *_setup.dat file after keyword T_profile
 #-----------------------------------------------------------------------------------------
 #
-l10         0.2972
-h10         1.5 #1.5
+l10         0.
+h10         2.75
 #h10         3.
 #select_h10  3
 #1  1.2
@@ -188,14 +188,14 @@ h10         1.5 #1.5
 #8  10.
 #
 ls10        0.
-hs10        0.4582
-Ts0         -1.725308e-04
-Tb0         -2.335013e-05
-Tbb0        0.0151
+hs10        0.
+Ts0         -1.313352e-06
+Tb0         -1.515820e-05
+Tbb0        0. 0.0493
 Tm          3.
-h_ML0       1.5
-Sals0       1.532768e-13
-Salb0       1.532768e-13
+h_ML0       1.0
+Sals0       8.267061e-12
+Salb0       8.262841e-12
 us0         1.E-5
 vs0         0.
 init_T      3
@@ -212,20 +212,24 @@ init_T      3
 #                   the first N values are polynomial coefficients, where N stands after
 #                   'effl_outflow' keyword
 #
-area_lake      818.
-#area_lake       9.E+10
+area_lake      3287.06
 cellipt 20
 lakeform 2
 trib_inflow    -9999.
 effl_outflow 0
 0. 0. 0.
-morphometry    6
-0.	818.
-0.25 700.
-0.5 600.
-1.0 500.
-1.25 400.
-1.5 300.
+morphometry    11
+0.	3287.06
+0.25 3000.
+0.5 2800.
+1.0 2600.
+1.25 2400.
+1.5 2200.
+1.75 2000.
+2.0 1800.
+2.25 1200.
+2.5 600.
+2.7 300.
 #
 #-----------------------------------------------------------------------------------------
 #                               NETCDF OUTPUT PARAMETERS
