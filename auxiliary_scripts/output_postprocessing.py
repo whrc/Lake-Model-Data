@@ -43,8 +43,12 @@ def parse_methane_series(filepath):
                     'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5'] #mg/(m**2*day)
     
     methane['Date'] = pd.to_datetime({'Year': methane['year'], 'Month': methane['month'], 'Day':methane['day']})
-    methane = methane[['Date','year', 'month', 'day', 'hour', 'total methane production due to young C decomposition, mol/(m**2*s)',
-                       'total methane production due to old C decomposition, mol/(m**2*s)', 'methane diffusion flux averaged over the lake bottom, upwards, mol/(m**2*s)',
+    methane = methane[['Date','year', 'month', 'day', 'hour',
+                       'lake surface methane concentration, mol/m**3',
+                       'lake bottom methane concentration, mol/m**3',
+                       'total methane production due to young C decomposition, mol/(m**2*s)',
+                       'total methane production due to old C decomposition, mol/(m**2*s)', 
+                       'methane diffusion flux averaged over the lake bottom, upwards, mol/(m**2*s)',
                        'methane ebullition flux at the surface, mol/(m**2*s)',
                        'methane ebullition flux at the surface, mg/(m**2*day)',
                        'methane turbulent flux at the lake surface, upwards, mol/(m**2*s)',
@@ -57,9 +61,22 @@ def parse_methane_series(filepath):
                        'oxygen ebullition flux at the surface, mol/(m**2*s)',
                        'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']]
     
-    methane.columns = ['Date', 'year', 'month', 'day', 'hour', 'methane_prod_young_mol/(m**2*s)', 'methane_prod_old_mol/(m**2*s)', 'methane_diffuse_bot_mol/(m**2*s)',
-                       'methane_ebul_mol/(m**2*s)', 'methane_ebul_mg/(m**2*day)', 'methane_turb_flux_mol/(m**2*s)', 'methane_turb_flux_mg/(m**2*day)',
-                      'methane_oxid_mg/(m**2*day)', 'methane_plant_med_flux_mg/(m**2*day)','co2_turb_flux_mol/(m**2*s)', 'co2_ebul_mol/(m**2*s)', 'ox_turb_flux_mol/(m**2*s)', 'ox_ebul_mol/(m**2*s)',
+    methane.columns = ['Date', 'year', 'month', 'day', 'hour',
+                       'lake surface methane concentration, mol/m**3',
+                       'lake bottom methane concentration, mol/m**3',
+                       'methane_prod_young_mol/(m**2*s)', 
+                       'methane_prod_old_mol/(m**2*s)', 
+                       'methane_diffuse_bot_mol/(m**2*s)',
+                       'methane_ebul_mol/(m**2*s)', 
+                       'methane_ebul_mg/(m**2*day)', 
+                       'methane_turb_flux_mol/(m**2*s)', 
+                       'methane_turb_flux_mg/(m**2*day)',
+                       'methane_oxid_mg/(m**2*day)', 
+                       'methane_plant_med_flux_mg/(m**2*day)',
+                       'co2_turb_flux_mol/(m**2*s)', 
+                       'co2_ebul_mol/(m**2*s)', 
+                       'ox_turb_flux_mol/(m**2*s)', 
+                       'ox_ebul_mol/(m**2*s)',
                       'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']
     
     methane['run_name'] = filepath.split('/')[-2]
