@@ -1,0 +1,12 @@
+Site,SitePrimaryKey,Lat,Long,Elev (m),CH4_category__Remote_Sensing,Area_of_lake__m2_,CH4_mL_m2_d1,DIC_mgC_L,Depth__m_,Notes,Type
+TKL 873,N_TKL_873,67.60998953,-162.5877864,41,high,6501,112.6,6.22,,,WB
+TKL 524,N_TKL_524,67.50030735,-162.5755724,27,high,8508,239.4,3.54,,,WB
+RCBP2.1,RCBP2_P1_1,67.496399,-163.608932,53,,16307,,,,Crude surface area estimated in GoogleEarth,WB
+WCBP1.2,WCBP1_P2_1,68.311408,-162.691287,312,,6904,,,,Crude surface area estimated in GoogleEarth,WB
+ERBP1 Pond1,ECBP1_P1_1,67.806351,-161.860758,293,,2698,,,,Crude surface area estimated in GoogleEarth,WB
+Kelly,,67.9333,-162.3,84,,,,,,,Wx
+Asik,,67.475,-162.2664,406,,,,,,,Wx
+Red Dog,,68.031,-162.903,294,,,,,,,Wx
+Noatak Lake,,67.5741,-162.9938,26,,,,,,,Wx
+Noatak Airport,,67.567,-162.983,25,,,,,,,Wx
+Tahinichok,,67.5503,-163.5672,260,,,,,,,Wx
