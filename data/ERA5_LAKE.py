@@ -30,10 +30,10 @@ import numpy as np
 SITES = {'test': [-113.9586, 46.9339, 1800],
              'TKL873':[-162.5878, 67.6070, 1800],
              'TKL524':[-162.5756, 67.5003, 1800], #verified in ee
-             'TKL917':[], 
-             'TKL884':[], 
+             'TKL917':[-162.6062, 67.61894, 1800], 
+             'TKL884':[-162.5845, 67.61177, 1800], 
              'TKL807':[], 
-             'SitukuyukBP':[], 
+             'SitukuyukBP':[-163.17819, 67.154665, 1800], 
              'RabitCreekBP':[-163.6089, 67.4964, 1800], #verified in ee
              'EliRiverBP':[-161.8608, 67.8064, 1800], #verified in ee
              'DosMeinacos':[-53.125, -12.555, 2000] #verified in ee
@@ -247,7 +247,10 @@ def postprocess_ERA5(gs_full_path, out_transient_path, out_transient_figure, out
 
     
 bucket_name='lake-model-data'
-site_name='EliRiverBP'
+site_name='SitukuyukBP'
+
+if not os.path.exists(f'NSF_sites/{site_name}/'):
+    os.mkdir(f'NSF_sites/{site_name}/')
 
 #download ERA5 from Earth Engine
 gs_path = ERA5_gee_pipeline(date_start = '2000-01-01', date_end = '2024-01-01', site_name=site_name, bucket_name=bucket_name)
