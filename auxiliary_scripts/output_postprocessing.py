@@ -1,5 +1,44 @@
 import pandas as pd
 
+def parse_T_fluxes(filepath):
+    '''
+    Read in LAKE model methane file 'methane_series 1 1.dat'
+
+    Args:
+    filepath (string): full filepath to methane file
+
+    Output:
+    methane (pd.DataFrame)
+    '''
+    t_flux=pd.read_csv(filepath, delimiter=r"\s+", skiprows=35, index_col=None, header=None)
+    t_flux.columns=['year','month','day','hour','integration_time',
+                    'surface temperature, C',
+                    'water skin temperature, C',
+                    'water surface temperature, C',
+                    'mean temperature of water coloumn, C',
+                    'maximal temperature in the water coloumn, C',
+                    'zero-dimensional model temperature, C',
+                    'upper ice surface temperature, C',
+                    'upper snow surface temperature, C',
+                    'sensible heat flux,    W/m**2',
+                    'latent heat flux,      W/m**2',
+                    'downward heat flux at the upper lake surface, W/m**2',
+                    'downward heat flux at the lake bottom, W/m**2',
+                    'friction velocity at the surface (waterside), m/s',
+                    'friction velocity at the bottom, m/s',
+                    'wind work at the water surface, W/m**2',
+                    'albedo of the lake-atmosphere interface, n/d',
+                    'shortwave radiation penetrated below surface, W/m**2',
+                    'significant wave height, m',
+                    'bottom ice salinity, kg/kg',
+                    'discharge in x direction, m**3/s',
+                    'discharge in y direction, m**3/s',
+                    'toptsoil_sc1', 'toptsoil_sc2', 'toptsoil_sc3', 'toptsoil_sc4', 'toptsoil_sc5'] #mg/(m**2*day)
+    
+    t_flux['Date'] = pd.to_datetime({'Year': t_flux['year'], 'Month': t_flux['month'], 'Day':t_flux['day']})
+
+    return t_flux
+
 def parse_methane_series(filepath):
     '''
     Read in LAKE model methane file 'methane_series 1 1.dat'
@@ -44,6 +83,7 @@ def parse_methane_series(filepath):
     
     methane['Date'] = pd.to_datetime({'Year': methane['year'], 'Month': methane['month'], 'Day':methane['day']})
     methane = methane[['Date','year', 'month', 'day', 'hour',
+                       'talik depth, m',
                        'lake surface methane concentration, mol/m**3',
                        'lake bottom methane concentration, mol/m**3',
                        'total methane production due to young C decomposition, mol/(m**2*s)',
@@ -62,6 +102,7 @@ def parse_methane_series(filepath):
                        'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']]
     
     methane.columns = ['Date', 'year', 'month', 'day', 'hour',
+                       'talik depth, m',
                        'lake surface methane concentration, mol/m**3',
                        'lake bottom methane concentration, mol/m**3',
                        'methane_prod_young_mol/(m**2*s)', 
