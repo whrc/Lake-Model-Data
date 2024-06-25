@@ -113,7 +113,7 @@ class SensitivityAnalysis():
         if not os.path.exists(destination_directory):
             os.makedirs(destination_directory)
 
-#         print(f"Copying files from {source_directory} to {destination_directory}")
+        print(f"Copying files from {source_directory} to {destination_directory}")
 
         for filename in os.listdir(source_directory):
             source_path = os.path.join(source_directory, filename)
