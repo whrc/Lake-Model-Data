@@ -242,12 +242,12 @@ def postprocess_ERA5(gs_full_path, out_transient_path, out_transient_figure, out
     ERA5_land_for_LAKE = format_df_for_LAKE(ERA5_land)
     ERA5_land_spinup = gen_ERA5_spinup(ERA5_land_for_LAKE, save_fig=out_spinup_figure)
 
-    ERA5_land_for_LAKE.to_csv(out_transient_path)
-    ERA5_land_spinup.to_csv(out_spinup_path)
+    ERA5_land_for_LAKE.to_csv(out_transient_path, index=False)
+    ERA5_land_spinup.to_csv(out_spinup_path, index=False)
 
     
 bucket_name='lake-model-data'
-site_name='SitukuyukBP'
+site_name='TKL873'
 
 if not os.path.exists(f'NSF_sites/{site_name}/'):
     os.mkdir(f'NSF_sites/{site_name}/')
@@ -257,10 +257,10 @@ gs_path = ERA5_gee_pipeline(date_start = '2000-01-01', date_end = '2024-01-01', 
 
 print('Processing locally for LAKE')
 gs_full_path = os.path.join('gs://', bucket_name, gs_path + '.csv')
-out_transient_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_transient.csv')
+out_transient_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_transient.dat')
 out_transient_figure = f'NSF_sites/{site_name}/{site_name}_transient.jpg'
 
-out_spinup_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_spinup.csv')
+out_spinup_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_spinup.dat')
 out_spinup_figure= f'NSF_sites/{site_name}/{site_name}_spinup.jpg'
 
 #process ERA5 locally for LAKE
