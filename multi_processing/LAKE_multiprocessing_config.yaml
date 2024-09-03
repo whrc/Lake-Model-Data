@@ -1,0 +1,138 @@
+
+work_dir: '/home/amullen/Lake-Model-Data/model_output/SA_test' # where to run model, save outputs
+path_to_model_dir: '/home/amullen/LAKE' # path to LAKE model base directory
+project_name: 'YKD-unburned-july-start' # path to project name that exists within LAKE file structure
+                                        # must have corresponding input .dat files in data/ and meteo/ folders
+                                        # and _setup and _driver files in setup/ folder of 'path_to_model_dir'
+
+n_runs: 2 # number of sensitivity runs
+plot_depth: -0.6 # will plot outputs at depth closest to this value (should be negative) 
+                 #or null to average over depth for summary plots
+
+# modules: which sensitivity analysis modules to run. Currently, 'bgc' and 'inflows_outflows'
+#         run with automatically-generated distributions or manually-defined sets of parameters, 
+#         dependent on configuration. 'morphometry' requires manually-defined morphometries
+
+modules: {
+          'bgc': True,
+          'morphometry': False,
+          'inflows_outflows': False
+          }
+  
+#################################################################################
+############ Configuration for biogeochemical sensitivity analysis. #############
+############         Only applies if modules['bgc'] == True         #############       
+# 
+# bgc_targets: parameters in setup.dat file to perturb
+#
+# bgc_init_values: initial values, only applies if bgc_perturb is a float between 0-1
+#
+# bgc_perturb: Parameter perturbation. Each element along the 0-axis corresponds to a parameter
+#   target in bgc_targets. 
+#   There are three options for the perturbation of parameters:
+#       1) Set a min-max range with a list of floats of length two. e.g. [0.3, 0.9]
+#       2) Perturbation percentage around initial values in bgc_init_values, must be float 0-1
+#       3) Directly set values with list of floats < 2. e.g. [0.3, 0.6, 0.9]
+#
+# bgc_logparams: For each parameter, specifies whether to use a logarithmic normal distribution (1) or not (0)
+
+bgc_targets: ['kc0', 'mubeta0', 'VmaxCH4aeroboxid', 'khsCH4', 'khsO2', 'r0methprod'] #params to change
+bgc_init_values: [3.442976e-07, 0.00001, 1.15E-7, 3.75E-2, 2.1E-2, 5.56e-08]
+
+bgc_perturb: [[3.588e-7, 6.944e-7], 
+              [1.0e-7, 4.0e-6], 
+              [5.0E-6, 1.5E-5], 
+              [9.0E-3, 9.9E-3], 
+              [1.0E-2, 3.0E-2], 
+              0.1]
+            
+bgc_logparams: [1, 1, 1, 1, 1, 1]
+
+############# End biogeochemical sensitivity analysis configuration #################
+#####################################################################################
+
+#####################################################################################
+############# Configuration for morphometry sensitivity analysis.   #################
+
+# morphometries: dictionary of named morphometries to use in sensitivity analysis
+#   When the 'morphometry' module is set to True, SA will cycle through these morphometries
+#   in a loop until the number of runs is exhausted.
+morphometries: {
+         'talik' : [[0,6500],
+                    [0.25,6450],
+                    [0.5,6400],
+                    [0.75,6350],
+                    [1,6300],
+                    [1.25,6150],
+                    [1.5,6000],
+                    [1.75,3000],
+                    [2,2500],
+                    [2.25,2400],
+                    [2.5,2300],
+                    [2.75,1]],
+
+        'deep_box' : [[0,6500],
+                      [0.25,6450],
+                      [0.5,6400],
+                      [0.75,6350],
+                      [1,6300],
+                      [1.25,6250],
+                      [1.5,6200],
+                      [1.75,6150],
+                      [2,6100],
+                      [2.25,6050],
+                      [2.5,3000],
+                      [2.75,1]],
+        
+        'deep_u' : [[0,6500],
+                    [0.25,6450],
+                    [0.5,6400],
+                    [0.75,6350],
+                    [1,6300],
+                    [1.25,6150],
+                    [1.5,6000],
+                    [1.75,5700],
+                    [2,5400],
+                    [2.25,4900],
+                    [2.5,3000],
+                    [2.75,1]],
+        
+        'shallow_box' : [[0,6500],
+                         [0.25,6450],
+                         [0.5,6400],
+                         [0.75,6350],
+                         [1,6300],
+                         [1.25,6000],
+                         [1.5,1]],
+
+        'shallow_u' : [[0,6500],
+                       [0.25,6200],
+                       [0.5,5900],
+                       [0.75,5500],
+                       [1,5000],
+                       [1.25,4000],
+                       [1.5,1]]
+    }
+
+############# End morphometry sensitivity analysis configuration #################
+#####################################################################################
+
+#################################################################################
+############ Configuration for inflow/outflow sensitivity analysis. #############
+############   Only applies if modules['inflows_outflows'] == True  #############
+# config variables are set up the same as the biogeochemical sensitivity variables in terms
+# of targets, values, and pertrubation. This module will create inflow/outflow files
+# for a given run with constant values for the inflow/outflow variables for theentire timeseries,
+# which are set based on the initial values and perturbation. For outflows, only width and velocity
+# can be defined, which are set equal to inflows to maintain a steady water level.
+#
+# possible variable names for inflow file:
+# 'width' (m), 'U'(velocity, m/s), 'temp'(C), 'sal'(?), 'Ux'(?), 'Uy'(?), 'DOC'(mol/m3), 
+# 'POC' (mol/m3), 'DIC' (mol/m3), 'CH4' (mol/m3), 'O2' (mol/m3)
+
+inflow_targets: ['width', 'U']
+inflow_init_values: [32.0, 4.97685185e-7] # velocity of 4.3 cm/day from Dabrowski et al., 2020: (4.3 * 1.0e-2) / 86400; cm/d * m/cm * day/s
+inflow_perturbations: [0.5, 0.5]
+
+############# End inflow/outflow sensitivity analysis configuration #################
+#####################################################################################
