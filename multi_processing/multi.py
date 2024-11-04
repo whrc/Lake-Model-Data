@@ -102,12 +102,12 @@ class SensitivityAnalysis():
         #your computer if you are running from root directory then just leave it like that
         os.mkdir(os.path.join(new_directory, 'results'))
         os.mkdir(os.path.join(new_directory, 'setup'))
-        os.mkdir(os.path.join(new_directory, 'data'))
+        #os.mkdir(os.path.join(new_directory, 'data'))
         os.mkdir(os.path.join(new_directory, 'meteo'))
                         
         source_files = [
             os.path.join(self.path_to_model_dir, 'driver_file.dat'),
-            os.path.join(self.path_to_model_dir, 'data', f'{self.project_name}.dat'),
+            #os.path.join(self.path_to_model_dir, 'data', f'{self.project_name}.dat'),
             os.path.join(self.path_to_model_dir, 'meteo', f'{self.project_name}.dat'),
             os.path.join(self.path_to_model_dir, 'setup_file.dat'),
             os.path.join(self.path_to_model_dir, 'setup', f'{self.project_name}_setup.dat'),
@@ -124,7 +124,7 @@ class SensitivityAnalysis():
 
         dests = [
             new_directory,
-            os.path.join(new_directory, 'data', f'{new_name}.dat'),
+            #os.path.join(new_directory, 'data', f'{new_name}.dat'),
             os.path.join(new_directory, 'meteo', f'{new_name}.dat'),
             new_directory,
             os.path.join(new_directory, 'setup', f'{new_name}_setup.dat'),
@@ -251,8 +251,7 @@ class SensitivityAnalysis():
         if log_param:
             samples = loguniform.rvs(bounds[0], bounds[1], size=n_runs)
         else:
-            samples = uniform.rvs(bounds[0], bounds[1], size=n_runs)
-        
+            samples = uniform.rvs(bounds[0], bounds[1]-bounds[0], size=n_runs)
         return samples
 
     def perturb_params(self, p_names, N, p_initial=None, perturbations=None, logparams=None, seed=None):
@@ -307,7 +306,7 @@ class SensitivityAnalysis():
         outflows_df.to_csv(outflows_path, index=False, sep=' ', header=False)
 
         self.process_file_and_update_value(setup_file, target='tribheat', new_value=2)
-        #self.find_target(["N_tribin"],N_tribin,number)
+        #self.find_target(["N_tribin"],1,1)
         self.process_file_and_update_value(setup_file, target='N_triblev', new_value=1)
         self.process_file_and_update_value(setup_file, target='iefflloc', new_value=1)
         self.process_file_and_update_value(setup_file, target='fileinflow', new_value=inflows_path.split('/')[-1])
@@ -444,7 +443,7 @@ class SensitivityAnalysis():
         return self.perturb_params(self.conf['inflow_targets'], 
                        self.n_runs, p_initial=self.conf['inflow_init_values'], 
                        perturbations=self.conf['inflow_perturbations'], 
-                       logparams=np.zeros(len(self.conf['inflow_targets'])), 
+                       logparams=self.conf['inflow_logparams'], 
                        seed=1)
         
     def gen_morphometry_sample_matrix(self):

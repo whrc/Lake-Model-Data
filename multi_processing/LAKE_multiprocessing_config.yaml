@@ -1,11 +1,11 @@
 
-work_dir: '/home/amullen/Lake-Model-Data/model_output/SA_test' # where to run model, save outputs
+work_dir: '/home/amullen/Lake-Model-Data/multi_processing/results/YKD-burned-inflows-sa' # where to run model, save outputs
 path_to_model_dir: '/home/amullen/LAKE' # path to LAKE model base directory
-project_name: 'YKD-unburned-july-start' # path to project name that exists within LAKE file structure
+project_name: 'YKD-burned-sa' # path to project name that exists within LAKE file structure
                                         # must have corresponding input .dat files in data/ and meteo/ folders
                                         # and _setup and _driver files in setup/ folder of 'path_to_model_dir'
 
-n_runs: 2 # number of sensitivity runs
+n_runs: 5 # number of sensitivity runs
 plot_depth: -0.6 # will plot outputs at depth closest to this value (should be negative) 
                  #or null to average over depth for summary plots
 
@@ -14,9 +14,9 @@ plot_depth: -0.6 # will plot outputs at depth closest to this value (should be n
 #         dependent on configuration. 'morphometry' requires manually-defined morphometries
 
 modules: {
-          'bgc': True,
+          'bgc': False,
           'morphometry': False,
-          'inflows_outflows': False
+          'inflows_outflows': True
           }
   
 #################################################################################
@@ -36,17 +36,32 @@ modules: {
 #
 # bgc_logparams: For each parameter, specifies whether to use a logarithmic normal distribution (1) or not (0)
 
-bgc_targets: ['kc0', 'mubeta0', 'VmaxCH4aeroboxid', 'khsCH4', 'khsO2', 'r0methprod'] #params to change
-bgc_init_values: [3.442976e-07, 0.00001, 1.15E-7, 3.75E-2, 2.1E-2, 5.56e-08]
+#bgc_targets: ['kc0', 'mubeta0', 'VmaxCH4aeroboxid', 'khsCH4', 'khsO2', 'r0methprod'] #params to change
+#bgc_init_values: [3.442976e-07, 0.00001, 1.15E-7, 3.75E-2, 2.1E-2, 5.56e-08]
+#bgc_perturb: [[3.588e-7, 6.944e-7], 
+#              [1.0e-7, 4.0e-6], 
+#              [5.0E-6, 1.5E-5], 
+#              [9.0E-3, 9.9E-3], 
+#              [1.0E-2, 3.0E-2], 
+#              0.1]
 
-bgc_perturb: [[3.588e-7, 6.944e-7], 
-              [1.0e-7, 4.0e-6], 
-              [5.0E-6, 1.5E-5], 
-              [9.0E-3, 9.9E-3], 
-              [1.0E-2, 3.0E-2], 
-              0.1]
+### YKD burned ###
+#bgc_targets: ['kc0', 'mubeta0', 'VmaxCH4aeroboxid', 'khsCH4', 'khsO2', 'r0methprod'] #params to change
+#bgc_init_values: [5.676894E-7, 0.000003, 1.15E-7, 3.75E-2, 2.1E-2, 1.29E-7]
+
+#bgc_perturb: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
             
-bgc_logparams: [1, 1, 1, 1, 1, 1]
+#bgc_logparams: [1, 1, 1, 1, 1, 1]
+##################
+
+### YKD unburned ###
+#bgc_targets: ['kc0', 'mubeta0', 'VmaxCH4aeroboxid', 'khsCH4', 'khsO2', 'r0methprod'] #params to change
+#bgc_init_values: [3.442976e-07, 0.00001, 1.15E-7, 3.75E-2, 2.1E-2, 5.56e-08]
+
+#bgc_perturb: [0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+            
+#bgc_logparams: [1, 1, 1, 1, 1, 1]
+##################
 
 ############# End biogeochemical sensitivity analysis configuration #################
 #####################################################################################
@@ -69,7 +84,7 @@ morphometries: {
                     [2,2500],
                     [2.25,2400],
                     [2.5,2300],
-                    [2.75,1]],
+                    [2.75,300]],
 
         'deep_box' : [[0,6500],
                       [0.25,6450],
@@ -82,7 +97,7 @@ morphometries: {
                       [2,6100],
                       [2.25,6050],
                       [2.5,3000],
-                      [2.75,1]],
+                      [2.75,300]],
         
         'deep_u' : [[0,6500],
                     [0.25,6450],
@@ -95,7 +110,7 @@ morphometries: {
                     [2,5400],
                     [2.25,4900],
                     [2.5,3000],
-                    [2.75,1]],
+                    [2.75,300]],
         
         'shallow_box' : [[0,6500],
                          [0.25,6450],
@@ -103,7 +118,7 @@ morphometries: {
                          [0.75,6350],
                          [1,6300],
                          [1.25,6000],
-                         [1.5,1]],
+                         [1.5,300]],
 
         'shallow_u' : [[0,6500],
                        [0.25,6200],
@@ -111,7 +126,7 @@ morphometries: {
                        [0.75,5500],
                        [1,5000],
                        [1.25,4000],
-                       [1.5,1]]
+                       [1.5,300]]
     }
 
 ############# End morphometry sensitivity analysis configuration #################
@@ -129,10 +144,19 @@ morphometries: {
 # possible variable names for inflow file:
 # 'width' (m), 'U'(velocity, m/s), 'temp'(C), 'sal'(?), 'Ux'(?), 'Uy'(?), 'DOC'(mol/m3), 
 # 'POC' (mol/m3), 'DIC' (mol/m3), 'CH4' (mol/m3), 'O2' (mol/m3)
+# There are three options for the perturbation of parameters:
+#       1) Set a min-max range with a list of floats of length two. e.g. [0.3, 0.9]
+#       2) Perturbation percentage around initial values in bgc_init_values, must be float 0-1
+#       3) Directly set values with list of floats < 2. e.g. [0.3, 0.6, 0.9]
 
-inflow_targets: ['width', 'U']
-inflow_init_values: [32.0, 4.97685185e-7] # velocity of 4.3 cm/day from Dabrowski et al., 2020: (4.3 * 1.0e-2) / 86400; cm/d * m/cm * day/s
-inflow_perturbations: [0.5, 0.5]
+inflow_targets: ['width', 'U', 'temp', 'CH4', 'DIC']
+inflow_init_values: [32.0, 4.97685185e-7, 280, 0.370, 0.5e-1] # velocity of 4.3 cm/day from Dabrowski et al., 2020: (4.3 * 1.0e-2) / 86400; cm/d * m/cm * day/s
+inflow_perturbations: [[51.99, 52.01],
+                       [1.98e-8, 8.98e-6],
+                       [5, 25],
+                       [0.169, 0.3701],
+                       [0.1e-3, 0.5]]
+inflow_logparams: [1, 1, 1, 1, 1]
 
 ############# End inflow/outflow sensitivity analysis configuration #################
 #####################################################################################

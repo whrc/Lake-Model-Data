@@ -33,6 +33,7 @@ SITES = {'test': [-113.9586, 46.9339, 1800],
              'TKL917':[-162.6062, 67.61894, 1800], 
              'TKL884':[-162.5845, 67.61177, 1800], 
              'TKL807':[], 
+             'YKD_two_ponds': [-163.230, 61.260, 1800],
              'SitukuyukBP':[-163.17819, 67.154665, 1800], 
              'RabitCreekBP':[-163.6089, 67.4964, 1800], #verified in ee
              'EliRiverBP':[-161.8608, 67.8064, 1800], #verified in ee
@@ -247,13 +248,27 @@ def postprocess_ERA5(gs_full_path, out_transient_path, out_transient_figure, out
 
     
 bucket_name='lake-model-data'
-site_name='TKL873'
+site_name='YKD_two_ponds'
+#date_start = '2000-01-01'
+#date_end = '2024-01-01'
+date_start = '2019-01-01'
+date_end = '2024-09-01'
+
+# TKL873 x
+# TKL524 x
+# TKL917 x
+# TKL884 x
+# TKL807 x
+# SitukuyukBP
+# RabitCreekBP
+# EliRiverBP
+# DosMeinacos
 
 if not os.path.exists(f'NSF_sites/{site_name}/'):
     os.mkdir(f'NSF_sites/{site_name}/')
 
 #download ERA5 from Earth Engine
-gs_path = ERA5_gee_pipeline(date_start = '2000-01-01', date_end = '2024-01-01', site_name=site_name, bucket_name=bucket_name)
+gs_path = ERA5_gee_pipeline(date_start = date_start, date_end = date_end, site_name=site_name, bucket_name=bucket_name)
 
 print('Processing locally for LAKE')
 gs_full_path = os.path.join('gs://', bucket_name, gs_path + '.csv')
