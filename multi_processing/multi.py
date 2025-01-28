@@ -284,7 +284,9 @@ class SensitivityAnalysis():
 
         return samples.transpose()
     
-    def mod_inflows_outflows_steady_state(self, path_to_meteo_file, setup_file, inflow_keys, inflow_values):
+    def mod_inflows_outflows_steady_state(self, path_to_meteo_file, setup_file, inflow_keys, inflow_values, 
+                                          years_to_apply=None, months_to_apply=None):
+        
         #values are going to be a dictionary where each key will be about
         inflows_path = path_to_meteo_file.split('.dat')[0]+'_inflows.dat'
         outflows_path = path_to_meteo_file.split('.dat')[0]+'_outflows.dat'
@@ -294,9 +296,18 @@ class SensitivityAnalysis():
         inflows_df['Date'] = pd.to_datetime(meteo_df[['Year', 'Month', 'Day']]).dt.strftime('%Y%m%d')
         inflows_df = inflows_df.fillna(-999)
         
+        if years_to_apply is None:
+            years_to_apply = meteo_df['Year'].unique()
+        
+        if months_to_apply is None:
+            months_to_apply = meteo_df['Month'].unique()
         #populate inflow columns based on supplied dictionary
         for key, value in zip(inflow_keys, inflow_values): 
-            inflows_df[key] = value
+            inflows_df.loc[(pd.to_datetime(inflows_df['Date']).dt.year.isin(years_to_apply)) & 
+                           (pd.to_datetime(inflows_df['Date']).dt.month.isin(months_to_apply)), key] = value
+            
+            inflows_df.loc[~(pd.to_datetime(inflows_df['Date']).dt.year.isin(years_to_apply)) | 
+                           ~(pd.to_datetime(inflows_df['Date']).dt.month.isin(months_to_apply)), key] = 0
 
         inflows_df.to_csv(inflows_path, index=False, sep=' ', header=False)
         outflows_df = pd.DataFrame(columns=['Date', 'width', 'U'])
@@ -306,6 +317,7 @@ class SensitivityAnalysis():
         outflows_df.to_csv(outflows_path, index=False, sep=' ', header=False)
 
         self.process_file_and_update_value(setup_file, target='tribheat', new_value=2)
+        #self.process_file_and_update_value(setup_file, target='tribheat', new_value=0)
         #self.find_target(["N_tribin"],1,1)
         self.process_file_and_update_value(setup_file, target='N_triblev', new_value=1)
         self.process_file_and_update_value(setup_file, target='iefflloc', new_value=1)
@@ -365,7 +377,7 @@ class SensitivityAnalysis():
         max_depth = np.abs(np.max(morphometry.transpose()[0]))
         max_area = np.abs(np.max(morphometry.transpose()[1]))
         ngrid_out_depths = np.floor_divide(max_depth,ngrid_out_interval)+1
-                               
+                 
         n_grid_list = []
         #ngrid_out
         curr = 0.0
@@ -455,8 +467,12 @@ class SensitivityAnalysis():
             print(f'mismatch between number of runs ({self.n_runs}) and number of morphometries')
             print(f'supplied in conf file ({len(conf_morphometries.keys())}), looping through morphometries to fill runs')
         
+        j=0
         for i in range(0,self.n_runs):
-            sa_morphometry_names.append(list(conf_morphometries.keys())[i])
+            sa_morphometry_names.append(list(conf_morphometries.keys())[j])
+            j+=1
+            if j == len(conf_morphometries.keys()):
+                j=0
         
         print(f'setting morphometries, using {sa_morphometry_names} from config file')
         
@@ -506,8 +522,13 @@ class SensitivityAnalysis():
                 self.change_morphometry(self.sa_morphometry_names[i], setup_file, driver_file, ngrid_out_interval = 0.2)
 
             if self.conf['modules']['inflows_outflows']:
-                self.mod_inflows_outflows_steady_state(meteo_file, setup_file, self.conf['inflow_targets'], self.inflows_samle_matrix[i])
-
+                self.mod_inflows_outflows_steady_state(meteo_file, setup_file, 
+                                                       self.conf['inflow_targets'], self.inflows_samle_matrix[i],
+                                                       self.conf['inflow_years'], self.conf['inflow_months'])
+            
+            if not self.conf['modules']['inflows_outflows']:
+                self.process_file_and_update_value(setup_file, target='tribheat', new_value=0)
+        
         #modify biogeochemical params if necesarry       
         if self.conf['modules']['bgc']:
             self.find_target(self.conf['bgc_targets'], self.bgc_samle_matrix, 
@@ -613,7 +634,7 @@ class SensitivityAnalysis():
 
 def main(config_file):
     # Read YAML file
-    with open('LAKE_multiprocessing_config.yaml', 'r') as stream:
+    with open(config_file, 'r') as stream:
         conf = yaml.safe_load(stream)
 
     sensitivity = SensitivityAnalysis(conf)
