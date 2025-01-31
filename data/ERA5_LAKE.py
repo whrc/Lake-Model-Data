@@ -27,17 +27,22 @@ import numpy as np
 #   - Buffer size of area to average ERA5 data surrounding point location
 #   - Start and end date
 
-SITES = {'test': [-113.9586, 46.9339, 1800],
-             'TKL873':[-162.5878, 67.6070, 1800],
-             'TKL524':[-162.5756, 67.5003, 1800], #verified in ee
-             'TKL917':[-162.6062, 67.61894, 1800], 
-             'TKL884':[-162.5845, 67.61177, 1800], 
-             'TKL807':[], 
-             'YKD_two_ponds': [-163.230, 61.260, 1800],
-             'SitukuyukBP':[-163.17819, 67.154665, 1800], 
-             'RabitCreekBP':[-163.6089, 67.4964, 1800], #verified in ee
-             'EliRiverBP':[-161.8608, 67.8064, 1800], #verified in ee
-             'DosMeinacos':[-53.125, -12.555, 2000] #verified in ee
+SITES = {#'test': [-113.9586, 46.9339, 1800]
+         #    'TKL873':[-162.5878, 67.6070, 1800],
+         #    'TKL524':[-162.5756, 67.5003, 1800], #verified in ee
+         #    'TKL917':[-162.6062, 67.61894, 1800], 
+         #    'TKL884':[-162.5845, 67.61177, 1800], 
+         #    'TKL807':[], 
+         #    'YKD_two_ponds': [-163.230, 61.260, 1800],
+         #    'SitukuyukBP':[-163.17819, 67.154665, 1800], 
+         #    'RabitCreekBP':[-163.6089, 67.4964, 1800], #verified in ee
+          #   'EliRiverBP':[-161.8608, 67.8064, 1800], #verified in ee
+          #   'DosMeinacos':[-53.125, -12.555, 2000], #verified in ee
+             'Tanguro_NE':[-52.4315, -12.917, 1800],
+             'Tanguro_SW':[-52.419, -12.9289, 1800],
+             'Tanguro_NW':[-52.4573, -12.7243, 1800],
+             'Tanguro_SE':[-52.3869, -13.0572, 1800],
+             'Tanguro':[-52.3899, -12.8862, 1800]
             }
 
 
@@ -248,11 +253,52 @@ def postprocess_ERA5(gs_full_path, out_transient_path, out_transient_figure, out
 
     
 bucket_name='lake-model-data'
-site_name='YKD_two_ponds'
+#site_name='Tanguro'
 #date_start = '2000-01-01'
 #date_end = '2024-01-01'
 date_start = '2019-01-01'
-date_end = '2024-09-01'
+date_end = '2024-12-31'
+
+
+for site_name, site_params in SITES.items():
+    print(f"Processing site: {site_name}")
+    
+    # Create the site directory if it doesn't exist.
+    # This creates a directory structure like "lake-model-data/Tanguro/"
+    site_dir = os.path.join(bucket_name, site_name)
+    if not os.path.exists(site_dir):
+        os.makedirs(site_dir)
+    
+    # Download ERA5 data from Earth Engine
+    gs_path = ERA5_gee_pipeline(date_start=date_start,
+                                date_end=date_end,
+                                site_name=site_name,
+                                bucket_name=bucket_name)
+    
+    print('gs_path:', gs_path)
+    print('Processing locally for LAKE')
+    
+    # Define full path to the CSV file stored in Google Cloud Storage
+    gs_full_path = os.path.join('gs://', bucket_name, gs_path + '.csv')
+    
+    # Define output paths for transient and spinup data/figures
+    # Ensure subdirectories like "LAKE" exist if needed (you can add os.makedirs for these if required)
+    out_transient_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_transient.dat')
+    out_transient_figure = os.path.join(bucket_name, site_name, f'{site_name}_transient.jpg')
+    
+    out_spinup_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_spinup.dat')
+    out_spinup_figure = os.path.join(bucket_name, site_name, f'{site_name}_spinup.jpg')
+    
+    # Process ERA5 data locally for LAKE
+    postprocess_ERA5(gs_full_path,
+                     out_transient_path,
+                     out_transient_figure,
+                     out_spinup_path,
+                     out_spinup_figure)
+    
+    print(f"Finished processing site: {site_name}\n")
+
+
 
 # TKL873 x
 # TKL524 x
@@ -264,23 +310,24 @@ date_end = '2024-09-01'
 # EliRiverBP
 # DosMeinacos
 
-if not os.path.exists(f'NSF_sites/{site_name}/'):
-    os.mkdir(f'NSF_sites/{site_name}/')
+#if not os.path.exists(f'{bucket_name}/{site_name}/'):
+#    os.mkdir(f'{bucket_name}/{site_name}/')
 
 #download ERA5 from Earth Engine
-gs_path = ERA5_gee_pipeline(date_start = date_start, date_end = date_end, site_name=site_name, bucket_name=bucket_name)
+#gs_path = ERA5_gee_pipeline(date_start = date_start, date_end = date_end, site_name=site_name, bucket_name=bucket_name)
 
-print('Processing locally for LAKE')
-gs_full_path = os.path.join('gs://', bucket_name, gs_path + '.csv')
-out_transient_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_transient.dat')
-out_transient_figure = f'NSF_sites/{site_name}/{site_name}_transient.jpg'
+#print('gs_path:',gs_path)
+#print('Processing locally for LAKE')
+#gs_full_path = os.path.join('gs://', bucket_name, gs_path + '.csv')
+#out_transient_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_transient.dat')
+#out_transient_figure = f'{bucket_name}/{site_name}/{site_name}_transient.jpg'
 
-out_spinup_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_spinup.dat')
-out_spinup_figure= f'NSF_sites/{site_name}/{site_name}_spinup.jpg'
+#out_spinup_path = os.path.join('gs://', bucket_name, f'{site_name}/LAKE/{site_name}_spinup.dat')
+#out_spinup_figure= f'{bucket_name}/{site_name}/{site_name}_spinup.jpg'
 
 #process ERA5 locally for LAKE
-postprocess_ERA5(gs_full_path, 
-                 out_transient_path,
-                 out_transient_figure, 
-                 out_spinup_path, 
-                 out_spinup_figure)
+#postprocess_ERA5(gs_full_path, 
+#                 out_transient_path,
+#                 out_transient_figure, 
+#                 out_spinup_path, 
+#                 out_spinup_figure)
