@@ -99,6 +99,7 @@ def parse_methane_series(filepath):
                        'co2 ebullition flux at the surface, mol/(m**2*s)',
                        'oxygen turbulent flux at the lake surface, upwards, mol/(m**2*s)',
                        'oxygen ebullition flux at the surface, mol/(m**2*s)',
+                       'methane flux by inlets, normalized by surface area, mol/(m**2*s)',
                        'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']]
     
     methane.columns = ['Date', 'year', 'month', 'day', 'hour',
@@ -118,7 +119,8 @@ def parse_methane_series(filepath):
                        'co2_ebul_mol/(m**2*s)', 
                        'ox_turb_flux_mol/(m**2*s)', 
                        'ox_ebul_mol/(m**2*s)',
-                      'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']
+                       'methane_influx_mol/(m**2*s)',
+                       'methane_ebul_sc1', 'methane_ebul_sc2', 'methane_ebul_sc3', 'methane_ebul_sc4', 'methane_ebul_sc5']
     
     methane['run_name'] = filepath.split('/')[-2]
 

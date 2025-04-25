@@ -1,0 +1,323 @@
+#---------------------------------------------------------------------------------------
+#                                     GENERAL CONTROLS
+#---------------------------------------------------------------------------------------
+# DESCRIPTION
+# path      --- the directory, in which the model is launched 
+#               (required to be set in some UNIX-systems)
+# runmode 1 --- stand alone run
+# runmode 2 --- running in atmospheric model as lake parametrization
+# omp     0 --- OpenMP is not used
+# omp     1 --- OpenMP is used     
+#---------------------------------------------------------------------------------------
+#
+path ''     
+runmode 1 
+omp 0
+#
+#----------------------------------------------------------------------------------------
+#                            SPATIAL RESOLUTION OF THE MODEL
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+# nstep_keps --- number of timesteps of k-epsilon parameterization per on model timestep
+# M         --- number of layers in water layer
+# Mice      --- number of layers in upper and deep layers
+# ns        --- number of levels in soil
+# d_surf    --- grid zooming parameter at the surface, n/d
+# d_bot     --- grid zooming parameter at the bottom,  n/d
+#----------------------------------------------------------------------------------------
+#
+nstep_keps 1
+M  40
+ns 10
+Mice 10
+d_surf 1.E-2
+d_bot  1.E-2
+#
+#----------------------------------------------------------------------------------------
+#                            CONTROLS FOR PHYSICS OF THE MODEL
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+#     PBL parameterization
+#     PBLpar -1 --- sensible, latent heat and momentum fluxes are given as input for the model
+#     PBLpar  0 --- the latent heat flux is set to zero, while sensible heat and momentum fluxes
+#                   are constant in time, specified by sensflux0 and momflux0
+#     PBLpar  1 --- Businger-Dayer formulas (Monin-Obukhov theory) for exchange coefficients
+#     PBLpar  2 --- formulation from NH3d
+#     PBLpar  3 --- formulation from FLake
+#     PBLpar  4 --- formulation implemented by M.Chechin
+#     c_d       --- the momentum exchange coefficient, n/d
+#     (if -999, momentum flux is calculated by surface flux scheme)
+#     waveenh 0 --- the shallow water correction of surface fluxes (Panin et al., 1996) is OFF
+#     waveenh 1 --- the shallow water correction of surface fluxes (Panin et al., 1996) is ON
+#     momflxpart 0 --- all momentum flux from the atmosphere is consumed by currents acceleration
+#     momflxpart 1 --- momentum flux from the atmosphere is partitioned between wave developemnt
+#                      (controlled by fetch) and currents acceleration,
+#                      following Lin et al. (2002, J. Phys. Ocean.)
+#     kwe       --- the factor of turbulence enhancement by wave breaking (wave energy factor),   n/d
+#     Relative to water currents wind
+#     relwind 0 --- relative wind is off
+#     relwind 1 --- relative wind is on
+#     Equation of state
+#     eos     1 --- from Hostetler model
+#     eos     2 --- from TEOS-2010
+#     eos     3 --- for Kivu lake including salinity
+#     nmeltpoint 1 --- melting point linearly dependent on salinity
+#     nmeltpoint 2 --- TEOS-2010 formula
+#     Turbulent mixing parameterization
+#     Turbpar 1 --- "Empirical" parametrization: Stepanenko, Lykosov (2005)
+#     Turbpar 2 --- "E-epsilon"("K-epsilon") parameterization: k=E**2/eps with 
+#                   prognostic equations for E and eps 
+#     Turbpar 3 --- Nickuradze (NICK) formulation: Rodi (1993)    
+#     Turbpar 4 --- Parabolic (PARAB) formulation: Engelund (1976)
+#     Turbpar 7 --- RNG (re-normalization group) formulation: Simoes (1998)
+#     stabfunc 1 --- constant stability functions (standard k-epsilon model)
+#     stabfunc 2 --- stability functions according to (Canuto et al., 2001)
+#     stabfunc 3 --- stability functions according to (Galperin et al., 1988)
+#     kepsbc   1 --- Neuman boundary conditions for unstratified sheared flow (Burchard, 2002)
+#     kepsbc   2 --- Neuman boundary conditions for unstratified non-sheared flow with wave breaking (Burchard, 2002)
+#     kepsbc   3 --- Neuman boundary conditions unstratified sheared flow with wave breaking  (Burchard, 2002)
+#     kepsbc   4 --- Neuman boundary conditions for free convection
+#     Water surface albedo: variable or constant
+#     varalb 0  --- constant  
+#     varalb 1  --- sun height dependent
+#     soiltype 1   --- the soil type is "sand"
+#     soiltype 2   --- the soil type is "loamy sand"
+#     soiltype 3   --- the soil type is "sandy loam"
+#     soiltype 4   --- the soil type is "loam"
+#     soiltype 5   --- the soil type is "silt loam"
+#     soiltype 6   --- the soil type is "sandy clay loam"
+#     soiltype 7   --- the soil type is "clay loam"
+#     soiltype 8   --- the soil type is "silty clay loam"
+#     soiltype 9   --- the soil type is "sandy clay"
+#     soiltype 10  --- the soil type is "silty clay"
+#     soiltype 11  --- the soil type is "clay"
+#     soil_depth   --- depth of the soil layer, m
+#     thermokarst_meth_prod 0. --- switch for old organics methane production under thermokarst lakes is OFF
+#     thermokarst_meth_prod 1. --- switch for old organics methane production under thermokarst lakes is ON
+#     soil_meth_prod 0. --- switch for new organics methane production under lakes is OFF
+#     soil_meth_prod 1. --- switch for new organics methane production under lakes is ON
+#     tricemethhydr 0. --- ice in soil pores is treated as pure ice
+#     tricemethhydr 1. --- ice in soil pores is treated as methane hydrate
+#     skin     0   --- the skin temperature parameterization is off
+#     skin     1   --- the skin temperature parameterisation is on
+#     sedim    0   --- gravitational sedimentation of tracer is NOT taken into account
+#     sedim    1   --- gravitational sedimentation of tracer is taken into account
+#     massflux 0   --- the massflux parameterization of convection (Siebesma et al., 2007) if OFF
+#     massflux 1   --- the massflux parameterization of convection (Siebesma et al., 2007) if ON
+#     sensflux0    --- sensible heat flux upwards, constant in time (relevant if PBLpar = 0), W/m**2
+#     momflux0     --- momentum flux downwards (positive), constant in time (relevant if PBLpar = 0), N/m**2
+#     ifrad    1   --- all radiation fluxes at the water surface are taken into account 
+#     ifrad    0   --- all radiation fluxes are set to zero
+#     dyn_pgrad 0  --- dynamic pressure gradient is OFF 
+#     dyn_pgrad 1  --- dynamic pressure gradient is ON 
+#     zero_model 0 --- zero-dimensional model is ON
+#     zero_model 1 --- zero-dimensional model is OFF
+#     outflpar   0 --- variables value at the outflow = cross-section mean 
+#     outflpar   1 --- the cross-section mean = 0.5*(inflow value + outflow value)
+#     outflpar   2 --- variables at the outflow are calculated using Lagrangian approach
+#     Note: zero-dimensional model is now implemented only for open water season and one-point simulation
+#     deadvol      --- the depth (m) corresponding to "dead volume" - the minimal allowed reservoir volume
+#----------------------------------------------------------------------------------------
+#
+varalb   1
+PBLpar   3
+waveenh  0
+momflxpart 0
+c_d      -999
+kwe      100.
+relwind  1
+eos      5
+lindens  0
+nmeltpoint 1
+Turbpar  2
+stabfunc 2
+kepsbc   1
+soiltype 1
+soil_depth  10.
+soilswitch  1
+nsoilcols 5
+tricemethhydr 0.
+carbon_model 2
+skin     0
+massflux 1
+ifrad    1
+ifbubble 1
+sedim    0
+salsoil  0
+saltice  0 
+dyn_pgrad 0
+pgrad    0.
+botfric   1
+horvisc   0
+backdiff  1
+backdiff0 -999.
+nManning  3.5E-2
+zero_model 0
+thermokarst_meth_prod 0.
+soil_meth_prod 1.
+outflpar 0
+#
+sensflux0 0.
+momflux0  1.e-2
+soilbotflx 0.
+cuette 0
+#
+VmaxCH4aeroboxid 0.000000008 #0.000008
+khsCH4 0.009556
+khsO2 0.01807
+r0methprod 0.00000003 #0.00000003
+kc0 3.837689e-07
+mubeta0 6.0e-06
+#
+deadvol 0.
+#
+#----------------------------------------------------------------------------------------
+#                           INITIAL CONDITIONS FOR TEMPERATURE
+#----------------------------------------------------------------------------------------
+#
+T_profile 15
+0.05  29.67543304  4.26368506e-15  0.2501731428  0.1411049503  0.009121638553125  1.1472290337423314e-06
+0.1  29.66695785  4.263661822e-15  0.24832346190000001  0.1408971949  0.01077628851875  1.1462016306102679e-06
+0.15  29.68528702  4.263711928e-15  0.2521307874  0.14134618470000002  0.007200963934375  1.1493154342912498e-06
+0.2  29.67167084  4.263675342e-15  0.24906280860000002  0.1410250492  0.009760434065625  1.1459451073619632e-06
+0.25  29.68917557  4.263721957e-15  0.2527364503  0.1414348527  0.006494692046875  1.1515984961252825e-06
+0.3  29.67465717  4.263684265e-15  0.2494696133  0.1411097162  0.00908861366875  1.1456741023571199e-06
+0.4  29.67668285  4.263690524e-15  0.2493169895  0.1411696001  0.008613890696875  1.1453261842105262e-06
+0.5  29.67827425  4.263695002e-15  0.2491853047  0.14121314000000001  0.008268448690625  1.1457157426541816e-06
+0.6  29.67960821  4.263698803e-15  0.2492663499  0.1412501182  0.0079753815375  1.1461889175008072e-06
+0.8  29.68169931  4.263705094e-15  0.24930410079999998  0.14131092090000003  0.0074944746875  1.1470221230222796e-06
+1.0  29.68336088  4.263710335e-15  0.2485247363  0.1413604907  0.0071030482875  1.1477966330319664e-06
+1.2  29.70017428  4.26373648e-15  0.2583929358  0.1415655467  0.005428500315625  1.1699019341298032e-06
+1.4  29.7009047  4.26373609e-15  0.2577069378  0.141564404  0.00543415815  1.1724604980626413e-06
+1.5  29.70099571  4.263735715e-15  0.2562346841  0.141562471  0.005449345403125  1.1735420600581208e-06
+2.0  29.72869997  4.263736033e-15  0.45898219419999997  0.1415361125  0.005440735109375  1.1816310631256054e-06
+#
+T_soilprofile 10
+0.  29.
+1.  29.
+2.  29.
+3.  29.
+4.  29.
+5.  29.
+6.  29.
+7.  29.
+8.  29.
+9.  29.
+#.
+#----------------------------------------------------------------------------------------
+#                               BOUNDARY CONDITIONS: TRIBUTARIES AND EFFLUENTS
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+# tribheat      --- the switch for thermal effect of tributaries and effluents, 0 - OFF
+#                                                                               1 - ON
+#-----------------------------------------------------------------------------------------
+#
+#
+tribheat 2
+N_tribin 1
+1
+N_triblev 1
+fileinflow  'Cascavel_inflows_dynamic.dat'
+fileoutflow 'Cascavel_outflows.dat'
+#iefflloc 2
+iefflloc 1
+dttribupdate 1.
+#dttribupdate 1.
+#
+#----------------------------------------------------------------------------------------
+#            DATA ASSIMILATION CONTROLS (NOT OPERATIONAL: PUT EVERYTHING TO 0)
+#----------------------------------------------------------------------------------------
+# assim        --- data assimilation technique:       0 - no data assimilation
+#                                                     1 - 
+#                                                     2 - Raleigh damping towards observations
+#                                                     3 - Cressman weighting
+#                                                     4 - ?
+# as_window    --- assimilation window:               1 - as_window is spinup period
+#
+#----------------------------------------------------------------------------------------
+#
+error_cov   0
+assim       0
+#as_window   1
+#
+#----------------------------------------------------------------------------------------
+#                      OUTPUT CONTROLS (for ASCII files)
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+# turb_out     --- output turbulence characteristics: 1 - on, 0 - off
+# monthly*     --- monthly mean profiles output:      1 - on, 0 - off
+# daily*       --- daily   mean profiles output:      1 - on, 0 - off
+# hourly*      --- hourly  mean profiles output:      1 - on, 0 - off
+# everystep*   --- every time step profiles output:   1 - on, 2 - on but without profiles, 0 - off
+# time_series* --- output of time series of layer thickness and surface values:      
+#                                                     1 - on, 0 - off
+# dt_out*      --- time interval for time series output, hours
+# nscreen      --- the period of screen output, timesteps
+# scale_output --- the switch for scaling of output of turbulent characteristics: 1 - on, 0 - off
+#                  (set 0 for simulations of ice-covered lakes)
+# ngrid_out    --- the number of output levels for vertical water temperature profiles: 
+#                  -1 - use numerical grid levels
+#                  >0 - use ngrid_out levels (in meters) given below
+# ngridsoil_out--- the number of output levels for vertical soil temperature profiles: 
+#                  -1 - use numerical grid levels
+#                  >0 - use ngridsoil_out levels (in meters) given below
+#----------------------------------------------------------------------------------------
+#
+turb_out    1
+monthly     1
+daily       1
+hourly      0
+everystep   0
+time_series 1
+time_series_aver 1
+dt_out      24.
+nscreen     1000
+zserout     -999.
+scale_output 0
+accum_begin 2017010112
+accum_end   2024123112
+rtemp 1
+-999. -999. -999.
+#
+ngrid_out 16
+0.
+0.05
+0.1
+0.15
+0.2
+0.25
+0.3
+0.4
+0.5
+0.6
+0.8
+1.0
+1.2
+1.4
+1.5
+2.0
+#
+ngridice_out 5
+0.1
+0.2
+0.3
+0.4
+0.5
+#
+ngridsoil_out 11
+0.
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+#
+#----------------------------------------------------------------------------------------
+# NOTE: VARIABLES, DENOTED BY ASTERISK *, ARE USED ONLY IN STANDALONE RUNS OF THE MODEL
+#----------------------------------------------------------------------------------------
+end

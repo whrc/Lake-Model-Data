@@ -1,0 +1,13 @@
+
+ Methane generation, transport and oxidation rates
+ Total bottom diff, Total surface diff, Total bottom ebul, Total surface ebul
+Summer    0.43965E+07  -0.14590E+07   0.18556E+07   0.30185E+09
+Winter    0.26990E+06  -0.12384E+05   0.12664E+06   0.78346E+07
+ Total prod from "new" org, Total prod from "old" org, Total oxidation in water,  Total oxidation in ice (for winter)
+Summer    0.11536E+06   0.00000E+00   0.46571E+05
+Winter    0.11349E+05   0.00000E+00   0.80293E+04   0.97725E+03
+Change of integral methane amount in water column and ice cover   0.44933E+02
+
+ Checking methane balance residuals:
+Total production in soil - total bottom flux   -0.65219E+07
+Total bottom flux - total surface flux - total oxidation -  methane total column amount change  -0.30162E+09

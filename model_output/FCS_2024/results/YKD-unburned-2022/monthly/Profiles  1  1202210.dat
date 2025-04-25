@@ -1,0 +1,17 @@
+ 1 - depth, m
+ 2 - temperature, C
+ 3 - salinity, kg/kg
+ 4 - density, kg/m**3
+ 5 - absolute value of velocity, m/s
+ 6 - turbulent kinetic energy, m**2/s**2
+ 7 - disspation rate, m**2/s**3
+ 8 - TKE production by buoyancy, m**2/s**3
+ 9 - TKE production by shear   , m**2/s**3
+ 10 - TKE production by seiches (Goudsmit paramaterization)  , m**2/s**3
+ 11 - TKE turbulent transport  , m**2/s**3
+ 12 - kinematic heat conductance, m**2/s
+   -0.000000    2.093  0.0000E+00  999.917  0.1918E+00  0.4862E-03  0.1658E-02 -0.5188E-09  0.1220E-03  0.0000E+00 -0.4533E-04  0.4379E-04
+   -0.100000    2.168  0.0000E+00  999.919  0.2647E-01  0.1449E-03  0.3904E-04 -0.3255E-08  0.8042E-05  0.0000E+00  0.1003E-02  0.1279E-03
+   -0.500000    2.353  0.0000E+00  999.926  0.4139E-02  0.1601E-04  0.5822E-06 -0.1615E-08  0.2460E-06  0.0000E+00  0.2062E-06  0.8929E-04
+   -1.000000    3.186  0.0000E+00  999.953  0.6364E-03  0.3977E-05  0.5356E-07 -0.4708E-09  0.2806E-07  0.0000E+00  0.2597E-07  0.1484E-03
+   -1.400000    4.061  0.0000E+00  999.975  0.1695E-03  0.2032E-05  0.1734E-07  0.1542E-09  0.7752E-08  0.0000E+00  0.9432E-08  0.1766E-03

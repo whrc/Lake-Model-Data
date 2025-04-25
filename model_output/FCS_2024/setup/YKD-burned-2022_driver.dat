@@ -1,0 +1,268 @@
+# The parameters for driver of Lake model
+#-----------------------------------------------------------------------------------------
+#                     INFORMATION ON THE FILE WITH ATMOSPHERIC DATA
+#-----------------------------------------------------------------------------------------
+# DESCRIPTION
+# dataname*   --- name of file with atmospheric data (must be in data directory)
+# height_T_q* --- height of temperature and humidity measurements, m
+# height_u*   --- height of wind measurements, m
+# interval*   --- time interval of measurements, hours
+# rad*        --- defines, atmospheric radiation (1) or net radiation (2) is
+#                 in the appropriate coloumn of datafile, relevant if input file is ASCII (forc_format = 0)
+# forc_format*--- defines the input file format: 0 - ASCII(text), 1 - netcdf
+# npoints*    --- the number of points of the forcing, must be 1, if input file is ASCII (forc_format = 0)
+# select_call --- the length of the set of numbers of forcing points (maximal 20), for which the Lake model
+#                 will be launched, other points will be omitted
+# form*       --- defines the input file format, relevant if input file is ASCII (forc_format = 0):
+#                                                     0 - "free" (adjustable) format (see below)
+#                                                     other options are disabled
+#
+# The parameters for adjustable format of input text file, relevant if forc_format = 0, form = 0 :
+#
+# N_header_lines* --- the number of lines, occupied by file header 
+# N_coloumns*     --- the total number of coloumns in the file
+# N_Year*         --- the number of coloumn with the number of year (not used in the model)
+# N_Month*        --- the number of coloumn with the number of month (not used in the model)
+# N_Day*          --- the number of coloumn with the number of day (not used in the model)
+# N_Hour*         --- the number of coloumn with the number of hour (not used in the model)
+# N_Uspeed*       --- the number of coloumn with x-component speed values,      (m/s)
+# N_Vspeed*       --- the number of coloumn with y-component speed values,      (m/s)
+# N_Temp*         --- the number of coloumn with air temperature values,        (K)
+# N_Hum*          --- the number of coloumn with air humidity values,           (kg/kg)
+# N_Pres*         --- the number of coloumn with atmospheric pressure value,s   (Pa)
+# N_SWdown*       --- the number of coloumn with net solar radiation values,    (W/m**2)
+# N_LWdown*       --- the number of coloumn with net longwave radiation values, (W/m**2)
+# N_Precip*       --- the number of coloumn with precipitation intensity,       (m/s)
+#-----------------------------------------------------------------------------------------
+#
+dataname    'YKD-burned-2022'
+forc_format 0
+npoints     1
+# 8
+#select_call 3
+#1
+#2
+#3
+#
+lakinterac  1
+form        0
+height_T_q  2.
+height_u    2.
+interval    24.
+rad         1
+#
+N_header_lines  1
+N_coloumns      11
+#
+N_Year          1
+N_Month         2
+N_Day           3
+N_Hour          -1
+N_Uspeed        4
+N_Vspeed        5
+N_Temp          6
+N_Hum           7
+N_Pres          8
+N_SWdown        9
+N_LWdown        10
+N_NetRad        -1
+N_Precip        11
+N_SensFlux      -1
+N_LatentFlux    -1
+N_Ustar         -1
+N_surfrad       -1
+N_cloud         -1
+N_SurfTemp      -1
+#
+#-----------------------------------------------------------------------------------------
+#                              TIME INTEGRATION PARAMETERS
+#-----------------------------------------------------------------------------------------
+# DESCRIPTION
+# year0*       --- julian year of start of integration
+# month0*      --- julian month of start of integration
+# day0*        --- julian day of start of integration
+# hour0*       --- hour of start of integration (is real value)
+# dt*          --- timestep,         s
+# tinteg*      --- integration time (including spinup period!), days
+# spinup_times*  --- number for spinup periods
+# spinup_period--- the duration of spinup period, s
+# call_Flake   --- the switch for integrating Flake model (1 - on, 0 - off)
+#-----------------------------------------------------------------------------------------
+#
+year0       2021
+month0      7
+day0        1
+hour0       12
+#
+tinteg      1172
+spinup_times  0
+spinup_period 0
+dt          20
+call_Flake  0
+control_point 1
+cp_period 10.
+#
+#----------------------------------------------------------------------------------------
+#                                   PHYSICAL PARAMETERS
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+# extwat       --- coefficient of solar radiation extinction in water body, m**(-1)
+# extice       --- coefficient of solar radiation extinction in ice layer,  m**(-1)
+# alphax       --- slope angle of water surface in the x-direction,         deg
+# alphay       --- slope angle of water surface in the y-direction,         deg
+# c_veg        --- friction coefficient of vegetation in water,             n/d
+# a_veg        --- effective cross-section of vegetation,                   m**2/m**2
+# h_veg        --- the height of vegetation in the lake,                    m
+# kor          --- Coriolis parameter,                                      s**(-1)
+#                  if -999, it is calculated from latitude
+# phi*         --- latitude (positive to North), deg (required only for water albedo calculation)
+# lam*         --- longitude (positive to East), dag (required only for water albedo calculation)
+# fetch        --- the wind fetch,                                          m
+#----------------------------------------------------------------------------------------
+# 0.485 - 0.85 mesotrophic
+extwat     0.02
+# 3.
+#select_extwat 9
+#2   0.02
+#20  0.12
+#108 0.14
+#86  0.17
+#176 0.12
+#105 0.24
+#39  0.17
+#170 0.14
+#163 1.2
+#
+extice      1.
+alphax      0.0
+alphay      0.0
+a_veg       0.3
+c_veg       1.e-3
+h_veg       0.
+#kor         0.
+kor         -999.
+# 1.e-4
+phi         61. 
+lam         -163.
+fetch       100.0
+#
+#----------------------------------------------------------------------------------------
+#                                   INITIAL CONDITIONS
+#----------------------------------------------------------------------------------------
+# DESCRIPTION
+# l10   --- thickness of ice,                          m
+# h10   --- thickness of liquid water,                 m
+# select_h10 --- thickness of liquid water in selected points (maximal 20), m
+#                (must be specified AFTER select_call)
+# ls10  --- thickness of ice at the bottom,            m
+# hs10  --- thickness of snow cover,                   m
+# Ts0   --- temperature of mixed layer,                C
+# Tb0   --- temperature at the bottom,                 C
+# Sals0 --- salinity in mixed layer,                   kg/kg
+# Salb0 --- salinity at the bottom,                    kg/kg
+# us0   --- x-component of speed at the surface,       m/s
+# vs0   --- y-component of speed at the surface,       m/s
+# Tbb0  --- temperature at the lower boundary of soil, C
+# h_ML0 --- thickness of mixed layer,                  m
+# init_T--- the type of temperature profile initialization:
+#           1 - using h_ML0, Ts0 and Tb0
+#           2 - using Tm,    Ts0 and Tb0
+#           3 - using the temperature profile, specified in *_setup.dat file after keyword T_profile
+#-----------------------------------------------------------------------------------------
+#
+l10         0.23
+h10         1.4
+#h10         3.
+#select_h10  3
+#1  1.2
+#2  2.
+#3  5.
+#select_h10  8
+#1  3.
+#2  4.
+#3  5.
+#4  6.
+#5  7.
+#6  8.
+#7  9.
+#8  10.
+#
+ls10        0.
+hs10        0.
+Ts0         -1.725308e-04
+Tb0         -2.335013e-05
+Tbb0        0.0151
+Tm          3.
+h_ML0       1.4
+Sals0       1.532768e-13
+Salb0       1.532768e-13
+us0         1.E-5
+vs0         0.
+init_T      3
+#
+#-----------------------------------------------------------------------------------------
+#                              SOME LAKE PARAMETERS
+#-----------------------------------------------------------------------------------------
+# area_lake     --- the area of the lake,                              m**2
+# trib_inflow*  --- total tributaries' inflow,                         m**3/s
+# morphometry   --- depth - lake cross-section area table,             m**2
+# effl_outflow  --- effluent discharge parameters group, specifying polynomial dependence
+#                   of discharge on water level; the last value is relative altitude of
+#                   effluent bottom over lake bottom (at deepest points, respectively);
+#                   the first N values are polynomial coefficients, where N stands after
+#                   'effl_outflow' keyword
+#
+area_lake      2124.
+#area_lake       9.E+10
+cellipt 20
+lakeform 2
+trib_inflow    -9999.
+effl_outflow 0
+0. 0. 0.
+morphometry 14
+0.0 2124.0
+0.1 1990.0
+0.2 1860.0
+0.3 1555.0
+0.4 1320.0
+0.5 552.0
+0.6 475.0
+0.7 387.0
+0.8 308.0
+0.9 247.0
+1.0 169.0
+1.1 113.0
+1.2 28.0
+1.3 10.0
+#
+#-----------------------------------------------------------------------------------------
+#                               NETCDF OUTPUT PARAMETERS
+#-----------------------------------------------------------------------------------------
+# DESCRIPTION
+# nstep_ncout  --- the interval of netcdf output from driver, timesteps (if -1 no netcdf output from driver)
+#-----------------------------------------------------------------------------------------
+nstep_ncout -1
+#15
+#
+#-----------------------------------------------------------------------------------------
+#                               FLAKE MODEL OUTPUT PARAMETERS
+#-----------------------------------------------------------------------------------------
+# DESCRIPTION
+# nstep_out_Flake  --- the interval of output of Flake variables from driver, timesteps 
+#                   (if -1 the output of Flake variables from driver is not implemented)
+#                   relevant if call_Flake = 1
+#-----------------------------------------------------------------------------------------
+#
+nstep_out_Flake 3
+#
+#-----------------------------------------------------------------------------------------
+#                              POSTPROCESSING OPTIONS
+#-----------------------------------------------------------------------------------------
+# moving_average_window --- the ineterval of moving average, netcdf output steps (intervals)
+# mean_cycle_period     --- the length of mean cycle, netcdf output steps (intervals)
+#-----------------------------------------------------------------------------------------
+#
+moving_average_window -1
+mean_cycle_period     -1
+#
+end
